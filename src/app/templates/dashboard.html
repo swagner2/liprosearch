@@ -1,0 +1,111 @@
+<div class="bs-example">
+    <nav class="navbar navbar-default">
+        <!--&lt;!&ndash; Brand and toggle get grouped for better mobile display &ndash;&gt;-->
+        <!--<div class="navbar-header">-->
+            <!--<button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">-->
+                <!--<span class="sr-only">Toggle navigation</span>-->
+                <!--<span class="icon-bar"></span>-->
+                <!--<span class="icon-bar"></span>-->
+                <!--<span class="icon-bar"></span>-->
+            <!--</button>-->
+            <!--<a href="#" class="navbar-brand">Brand</a>-->
+        <!--</div>-->
+        <!-- Collection of nav links and other content for toggling -->
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <!--<ul class="nav navbar-nav">-->
+                <!--<li class="active"><a href="#">Home</a></li>-->
+                <!--<li><a href="#">Profile</a></li>-->
+                <!--<li><a href="#">Messages</a></li>-->
+            <!--</ul>-->
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-click="logout()"><a >logout</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1 style="text-align:center;padding-right: 234px;">{{heading}}</h1>
+            <div class="alert alert-danger" ng-show="errorFlag">
+                {{errorMessage}}
+            </div>
+            <form class="form-horizontal" name="myForm" ng-submit="createQueryString()">
+                <div class="form-group" ng-repeat="titles in titlesArray">
+                    <label for="title" class="control-label col-xs-2">Title</label>
+                    <div class="col-xs-6">
+                        <input type="text" class="form-control" placeholder="" ng-model="titles.title">
+
+                    </div>
+                    <div class="form-group col-xs-2">
+                        <a>
+                            <span class="glyphicon glyphicon-plus"   ng-show="(titlesArray.length - 1) == $index" ng-click="addRemoveTitle(1,$index)"></span>
+                            <span class="glyphicon glyphicon-minus"  ng-click="addRemoveTitle(2,$index)"></span>
+                        </a>
+                    </div>
+                    <div class="form-group col-xs-3"></div>
+                    <div class="form-group col-xs-6" ng-hide="(titlesArray.length-1) == $index">
+                        <div class="col-xs-2">
+                            <label>
+                                <input type="radio" ng-model="titles.type" value="AND">
+                                 AND
+                            </label><br/>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>
+                                <input type="radio" ng-model="titles.type" value="OR">
+                                OR
+                            </label><br/>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>
+                                <input type="radio" ng-model="titles.type" value="NOT">
+                                NOT
+                            </label><br/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="company" class="control-label col-xs-2">Company</label>
+                    <div class="col-xs-6">
+                        <textarea name="company" rows="8" cols="40" class="form-control" ng-model="companies"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-success" type="submit">Search</button>
+                <div class="form-group">
+                    <label for="company" class="control-label col-xs-2">Your Search:</label>
+                    <div class="col-xs-6">
+                        <textarea name="search" id="search"rows="8" cols="40" class="form-control" ng-model="queryString"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-primary" ng-click="copyFunction()">Copy</button>
+                <button class="btn btn-primary" ng-click="save()">Save</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Searched Strings</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="str in queryArr">
+                    <td>{{str.queryStrings}}</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,13 @@
+{
+  "development": {
+    "PORT": 3000,
+    "MONGODB_URI": "mongodb://heroku_kz7nv6lz:liprosearch_open_app_1@ds243345.mlab.com:43345/heroku_kz7nv6lz",
+    "JWT_SECRET": "pojiaj234oi234oij234oij4",
+    "facebook_clientID":"1965122110370558",
+    "facebook_clientSecret":"b4a9673810f0c80abb5eba483422fd0b",
+    "facebook_callbackURL":"http://localhost:3000/auth/facebook/callback",
+    "linkedin_clientID":"8115qiibsm41e6",
+    "linkedin_clientSecret":"4PKaf7o1E7EHMMt9",
+    "linkedin_callbackURL":"http://localhost:3000/auth/linkedin/callback"
+  }
+}
