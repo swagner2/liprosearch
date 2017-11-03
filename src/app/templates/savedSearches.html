@@ -1,0 +1,34 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 style="text-align:center;padding-right: 234px;">{{heading}}</h1>
+            <div class="alert alert-danger" ng-show="errorFlag">
+                {{errorMessage}}
+            </div>
+            <div class="alert alert-success" ng-show="successFlag">
+                {{successMessage}}
+            </div>
+            <table class="table table-inverse">
+                <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Searched results</th>
+                      <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="str in queryArr track by $index" ng-if="queryArr.length">
+                        <td>{{$index + 1}}</td>
+                        <td>{{str.queryStrings}}</td>
+                        <td ng-click="delete(str)"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                    </tr>
+                    <tr ng-if="!queryArr.length">
+                        <td>No saved searches found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

@@ -9,6 +9,7 @@ var moment           = require('moment');
 module.exports = function(router) {
 
     router.get('/auth/facebook', passportFacebook.authenticate('facebook',{ scope: [ 'email' ] }));
+    
     router.get('/auth/facebook/callback',
         passportFacebook.authenticate('facebook', { failureRedirect: 'http://localhost:3000/#/login' }),
         function(req, res) {
@@ -25,6 +26,7 @@ module.exports = function(router) {
             // The request will be redirected to LinkedIn for authentication, so this
             // function will not be called.
         });
+
     router.get('/auth/linkedin/callback', passportLinkedIn.authenticate('linkedin', {failureRedirect: 'http://localhost:3000/#/login'}),function(req,res){
         var user=req.user;
         var fullUrl = req.protocol + '://' + req.get('host');
@@ -95,6 +97,42 @@ module.exports = function(router) {
                     }
                     ;
                 })
+
+            }
+        })
+
+    });
+
+    router.post('/delete/result',function(req,res){
+
+        var fullUrl = req.protocol + '://' + req.get('host');
+        var token = req.body.token || req.query.token || req.headers['Authorization'] || req.headers.token;
+
+        jwt.verify(token, 'test', function(err, decoded) {
+            if (err) {
+                console.log(err);
+                return res.status(403).json({code: 403, message: 'unauthorized'});
+            } else {
+                // if everything is good, save to request for use in other routes
+                // console.log(req.body.id);
+                Search.remove({_id:req.body.id}, function(err, data) {
+
+                    if (err) {
+
+                        res.json({
+                            message: 'Whoops Something Went Wong!',
+                            success: false
+                        });
+
+                    } else {
+
+                        res.json({
+                            message: 'Record deleted successfuly!',
+                            success: true
+                        });
+
+                    };
+                });
 
             }
         })

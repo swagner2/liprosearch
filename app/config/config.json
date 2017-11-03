@@ -1,7 +1,7 @@
 {
   "development": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://heroku_kz7nv6lz:liprosearch_open_app_1@ds243345.mlab.com:43345/heroku_kz7nv6lz",
+    "MONGODB_URI": "mongodb://localhost:27017/linkedInDB",
     "JWT_SECRET": "pojiaj234oi234oij234oij4",
     "facebook_clientID":"1965122110370558",
     "facebook_clientSecret":"b4a9673810f0c80abb5eba483422fd0b",

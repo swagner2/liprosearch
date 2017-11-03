@@ -2,11 +2,24 @@ var uiApp=angular.module('linkedIn',['ngRoute']);
 
 
 uiApp.config(function($routeProvider,$locationProvider) {
-    //$locationProvider.hashPrefix('');
+    
     $routeProvider
+        .when('/', {
+            redirectTo: "/dashboard"
+        })
         .when('/dashboard', {
             templateUrl: './app/templates/dashboard.html',
             controller: 'dashboardCtrl',
+            resolve : {
+                //This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(AuthService){
+                    return AuthService.authenticate();
+                }
+            }
+        })
+        .when('/viewallsearches', {
+            templateUrl: './app/templates/savedSearches.html',
+            controller: 'viewAllCtrl',
             resolve : {
                 //This function is injected with the AuthService where you'll put your authentication logic
                 'auth' : function(AuthService){
