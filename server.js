@@ -1,4 +1,4 @@
-require('./app/config/config');
+//require('./app/config/config');
 
 const express 		= require ('express');
 const morgan 		= require('morgan');
