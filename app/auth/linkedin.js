@@ -17,27 +17,50 @@ passport.use(new LinkedInStrategy({
             // represent the logged-in user. In a typical application, you would want
             // to associate the LinkedIn account with a user record in your database,
             // and return that user instead.
-            var searchQuery = {
-                provider_id: profile.id
-            };
+             var searchQuery = {
+                 email: profile.emails[0].value
+             };
+             var updates = {
+                 name: profile.displayName,
+                 provider_id: profile.id,
+                 email: profile.emails[0].value
+             };
 
-            var updates = {
-                name: profile.displayName,
-                provider_id: profile.id,
-                email: profile.emails[0].value
-            };
+             var options = {
+                 upsert: true
+             };
 
-            var options = {
-                upsert: true
-            };
-            // update the user if s/he exists or add a new user
-            User.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
-                if(err) {
-                    return done(err);
-                } else {
-                    return done(null, user);
-                }
-            });
+             User.find({email: profile.emails[0].value}).then(function(user){
+                 // update the user if s/he exists or add a new user
+                 if (user.length===0){
+                     var newuser = new User();
+                     newuser.name= profile.displayName;
+                     newuser.provider_id= profile.id;
+                     newuser.email= profile.emails[0].value;
+
+                     newuser.save(function(err,user){
+                         if(err) {
+                             return done(err);
+                         } else {
+                             return done(null, user);
+                         }
+                     })
+
+                 } else {
+
+                     User.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
+                         if(err) {
+                             return done(err);
+                         } else {
+                             return done(null, user);
+                         }
+                     });
+                 }
+
+             }).catch(function(err){
+
+                 return done(err);
+             });
         })
     }
 

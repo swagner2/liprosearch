@@ -5,14 +5,14 @@ uiApp.factory('dashboardService',function($http,$location,$window){
     dashboadFactory.create = function(obj){
         //$http.defaults.headers.common.token();
         $http.defaults.headers.common['token'] = token;
-        obj.token=token;
+        obj.token=$window.localStorage.getItem('token');
          return $http.post('/search',obj,{});
     };
 
     dashboadFactory.getAll = function () {
         //$http.defaults.headers.common.token();
         var obj ={
-            token: token
+            token: $window.localStorage.getItem('token')
         };
 
         return $http.post('/getAll',obj,{});
@@ -22,7 +22,7 @@ uiApp.factory('dashboardService',function($http,$location,$window){
 
         $http.defaults.headers.common['token'] = token;
         var obj ={
-            token: token,
+            token: $window.localStorage.getItem('token'),
             id: id
         };
         

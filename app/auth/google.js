@@ -1,18 +1,17 @@
 var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
 
 var User = require('../models/users');
 var init = require('./init');
 
 
-passport.use(new FacebookStrategy({
-        clientID: process.env.facebook_clientID,
-        clientSecret: process.env.facebook_clientSecret,
-        callbackURL: process.env.facebook_callbackURL,
-        profileFields: ['id','displayName','emails']
+passport.use(new GoogleStrategy({
+        clientID: process.env.google_clientID,
+        clientSecret: process.env.google_clientSecret,
+        callbackURL: process.env.google_callbackURL,
+        passReqToCallback   : true
     },
-    function(accessToken, refreshToken, profile, done) {
-        //console.log(profile);
+    function(request,accessToken, refreshToken, profile, done) {
         var searchQuery = {
             email: profile.emails[0].value
         };
@@ -42,8 +41,7 @@ passport.use(new FacebookStrategy({
                     }
                 })
 
-            } else {
-
+            }else {
                 User.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
                     if(err) {
                         return done(err);

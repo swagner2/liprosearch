@@ -4,7 +4,7 @@ uiApp.controller('dashboardCtrl',function($rootScope, $scope,$timeout,dashboardS
     $scope.heading = "Linkedin Pro Tool";
     $scope.titlesArray=[{
         title:"",
-        type:""
+        type:"OR"
     }];
     $scope.queryString          = '';
     $scope.companies            = '';
@@ -19,10 +19,15 @@ uiApp.controller('dashboardCtrl',function($rootScope, $scope,$timeout,dashboardS
         if (type == 1) {
             $scope.titlesArray.push({
                 title:"",
-                type:""
+                type:"OR"
             })
         } else if(type == 2){
-            $scope.titlesArray.splice(index,1);
+
+            if ($scope.titlesArray.length !== 1){
+
+                $scope.titlesArray.splice(index,1);
+            }
+
         }
     };
 
