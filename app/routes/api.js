@@ -6,7 +6,6 @@ var jwt              = require('jsonwebtoken');
 var Search           = require('../models/search');
 var moment           = require('moment');
 
-
 module.exports = function(router) {
 
     router.get('/auth/facebook', passportFacebook.authenticate('facebook',{ scope: [ 'email' ] }));
@@ -18,8 +17,9 @@ module.exports = function(router) {
             //console.log(req.user);
             var fullUrl = req.protocol + '://' + req.get('host')
             var user=req.user
-            var token = jwt.sign({id:user.provider_id,email:user.email}, "test",{ algorithm: 'HS256', expiresIn: 60*60*24 });
+            var token = jwt.sign({id:user.provider_id,email:user.email},process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
             res.redirect(fullUrl + '/#/auth/' +token);
+
         });
 
     router.get('/auth/linkedin', passportLinkedIn.authenticate('linkedin', { state: 'SOME STATE'  }),
@@ -29,10 +29,12 @@ module.exports = function(router) {
         });
 
     router.get('/auth/linkedin/callback', passportLinkedIn.authenticate('linkedin', {failureRedirect: '/'}),function(req,res){
+
         var user=req.user;
         var fullUrl = req.protocol + '://' + req.get('host');
-        var token = jwt.sign({id:user.provider_id,email:user.email}, "test",{ algorithm: 'HS256', expiresIn: 60*60*24 });
+        var token = jwt.sign({id:user.provider_id,email:user.email}, process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
         res.redirect(fullUrl+'/#/auth/' +token);
+
     });
 
     router.get('/auth/google',
@@ -42,20 +44,31 @@ module.exports = function(router) {
         ));
 
     router.get('/auth/google/callback', passportGoogle.authenticate('google', {failureRedirect: '/'}),function(req,res){
+
         var user=req.user;
         var fullUrl = req.protocol + '://' + req.get('host');
-        var token = jwt.sign({id:user.provider_id,email:user.email}, "test",{ algorithm: 'HS256', expiresIn: 60*60*24 });
+
+        // generating authentication token
+        var token = jwt.sign({id:user.provider_id,email:user.email},process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
         res.redirect(fullUrl+'/#/auth/' +token);
     });
+
+    // route to add users search into the database
     router.post('/search',function(req,res){
+
         var token = req.body.token || req.query.token || req.headers['Authorization'] || req.headers.token;
-        jwt.verify(token, 'test', function(err, decoded) {
+
+        // token validation
+        jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+
             if (err) {
+
                 console.log(err);
                 return res.status(403).json({code: 403, message: 'unauthorized'});
+
             } else {
+
                 // if everything is good, save to request for use in other routes
-                //console.log("gashdasd",decoded);
                 var search = new Search();
                 search.provider_id = decoded.id;
                 search.user_email=decoded.email;
@@ -77,14 +90,19 @@ module.exports = function(router) {
 
     });
 
+    // route to get users search from the database
     router.post('/getAll',function(req,res){
+
         var fullUrl = req.protocol + '://' + req.get('host')
         var token = req.body.token || req.query.token || req.headers['Authorization'] || req.headers.token;
-        //console.log('token',token);
-        jwt.verify(token, 'test', function(err, decoded) {
+
+        // token validation
+        jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
             if (err) {
+
                 console.log(err);
                 return res.status(403).json({code: 403, message: 'unauthorized'});
+
             } else {
                 // if everything is good, save to request for use in other routes
                 //console.log(decoded);
@@ -115,12 +133,13 @@ module.exports = function(router) {
 
     });
 
+    // route to delete users search from the database
     router.post('/delete/result',function(req,res){
 
         var fullUrl = req.protocol + '://' + req.get('host');
         var token = req.body.token || req.query.token || req.headers['Authorization'] || req.headers.token;
 
-        jwt.verify(token, 'test', function(err, decoded) {
+        jwt.verify(token, process.env.JWT_SECRET , function(err, decoded) {
             if (err) {
                 console.log(err);
                 return res.status(403).json({code: 403, message: 'unauthorized'});
@@ -151,20 +170,13 @@ module.exports = function(router) {
 
     });
 
+    // route to logot users
     router.get('/logout', function(req, res){
         req.logout();
         res.status(200).json({message:"ok"})
     });
 
-
-    function ensureAuthenticated(req, res, next) {
-        if (req.isAuthenticated()) {
-            return next();
-        }
-        res.redirect('/login');
-
-    }
-        return router;
+    return router;
 }
 
 

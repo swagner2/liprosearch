@@ -43,9 +43,10 @@ var cookieParser = require('cookie-parser');
   app.get('/',function(req,res){
       res.sendFile(path.join(__dirname + '/src/index.html'))
   });
-  console.log(process.env.facebook_clientID);
+
 
 // server is listening
   app.listen(port,function  () {
       console.log('Running on port '+ port);
   });
+

@@ -1,7 +1,7 @@
 uiApp.controller('dashboardCtrl',function($rootScope, $scope,$timeout,dashboardService,$window,$location){
     
     // all variables here
-    $scope.heading = "Linkedin Pro Tool";
+    $scope.heading = "Linkedin Pro Search";
     $scope.titlesArray=[{
         title:"",
         type:"OR"

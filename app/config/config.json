@@ -11,6 +11,10 @@
     "linkedin_callbackURL":"http://localhost:3000/auth/linkedin/callback",
     "google_clientID":"716268173458-dpbhlpjuso6gcd4fc81p0e7pifqraupv.apps.googleusercontent.com",
     "google_clientSecret":"7uMpzW3VZohFcWOjBHdHgm12",
-    "google_callbackURL":"http://localhost:3000/auth/google/callback"
+    "google_callbackURL":"http://localhost:3000/auth/google/callback",
+    "drip_accessToken":"yc7c77vtjytt8he3pscr",
+    "drip_account_ID":"3411610",
+    "drip_workflow_ID":"415666820",
+    "drip_subscriber_tags":["Leads"]
   }
 }

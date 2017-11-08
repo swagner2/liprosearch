@@ -4,6 +4,10 @@ var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 var User = require('../models/users');
 var init = require('./init');
 
+var dripClient = require('drip-nodejs')({ token:process.env.drip_accessToken });
+var workflowId = process.env.drip_workflow_ID; // drip workflow id which is used for automation
+var accountId  = process.env.drip_account_ID;
+var dripSubscriberTag = process.env.drip_subscriber_tags;
 
 passport.use(new LinkedInStrategy({
         clientID: process.env.linkedin_clientID,
@@ -42,7 +46,28 @@ passport.use(new LinkedInStrategy({
                          if(err) {
                              return done(err);
                          } else {
-                             return done(null, user);
+
+                             var payload={
+                                 "subscribers": [{
+                                     "email": user.email,
+                                     "time_zone": "America/Los_Angeles",
+                                     "custom_fields": {
+                                         "name": user.name
+                                     },
+                                     "tags":dripSubscriberTag,
+                                 }]
+                             };
+                             // send user to subscribe to the workflow of a drip account
+                             dripClient.startOnWorkflow(accountId, workflowId, payload,function(error, response, body){
+                                 if (error){
+
+                                     return done(null, error);
+
+                                 } else {
+
+                                     return done(null, user);
+                                 }
+                             });
                          }
                      })
 
