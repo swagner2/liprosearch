@@ -5,7 +5,9 @@ var Schema=mongoose.Schema;
 var SearchSchema = new Schema({
     provider_id :String,
     user_email  :String,
-    queryStrings:String
+    user_name   :String,
+    queryStrings:String,
+    provider_name:String,
 
 });
 

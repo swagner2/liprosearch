@@ -16,6 +16,7 @@ passport.use(new LinkedInStrategy({
         scope: ['r_emailaddress', 'r_basicprofile'],
     },
     function(accessToken, refreshToken, profile, done) {
+        //console.log(profile);
          process.nextTick(function () {
             // To keep the example simple, the user's LinkedIn profile is returned to
             // represent the logged-in user. In a typical application, you would want
@@ -25,9 +26,8 @@ passport.use(new LinkedInStrategy({
                  email: profile.emails[0].value
              };
              var updates = {
-                 name: profile.displayName,
                  provider_id: profile.id,
-                 email: profile.emails[0].value
+                 provider_name:profile.provider
              };
 
              var options = {
@@ -41,6 +41,9 @@ passport.use(new LinkedInStrategy({
                      newuser.name= profile.displayName;
                      newuser.provider_id= profile.id;
                      newuser.email= profile.emails[0].value;
+                     newuser.first_name= profile.name.givenName;
+                     newuser.last_name=profile.name.familyName;
+                     newuser.provider_name=profile.provider
 
                      newuser.save(function(err,user){
                          if(err) {
@@ -52,7 +55,9 @@ passport.use(new LinkedInStrategy({
                                      "email": user.email,
                                      "time_zone": "America/Los_Angeles",
                                      "custom_fields": {
-                                         "name": user.name
+                                         "name": user.name,
+                                         "first_name":user.first_name,
+                                         "last_name":user.last_name
                                      },
                                      "tags":dripSubscriberTag,
                                  }]
@@ -77,6 +82,7 @@ passport.use(new LinkedInStrategy({
                          if(err) {
                              return done(err);
                          } else {
+
                              return done(null, user);
                          }
                      });

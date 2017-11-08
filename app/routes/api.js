@@ -17,7 +17,7 @@ module.exports = function(router) {
             //console.log(req.user);
             var fullUrl = req.protocol + '://' + req.get('host')
             var user=req.user
-            var token = jwt.sign({id:user.provider_id,email:user.email},process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
+            var token = jwt.sign({id:user.provider_id, email:user.email, name:user.name, provider_name:user.provider_name },process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
             res.redirect(fullUrl + '/#/auth/' +token);
 
         });
@@ -32,7 +32,7 @@ module.exports = function(router) {
 
         var user=req.user;
         var fullUrl = req.protocol + '://' + req.get('host');
-        var token = jwt.sign({id:user.provider_id,email:user.email}, process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
+        var token = jwt.sign({id:user.provider_id,email:user.email, name:user.name, provider_name:user.provider_name }, process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
         res.redirect(fullUrl+'/#/auth/' +token);
 
     });
@@ -49,7 +49,7 @@ module.exports = function(router) {
         var fullUrl = req.protocol + '://' + req.get('host');
 
         // generating authentication token
-        var token = jwt.sign({id:user.provider_id,email:user.email},process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
+        var token = jwt.sign({id:user.provider_id, email:user.email, name:user.name, provider_name:user.provider_name },process.env.JWT_SECRET,{ algorithm: 'HS256', expiresIn: 60*60*24 });
         res.redirect(fullUrl+'/#/auth/' +token);
     });
 
@@ -70,9 +70,12 @@ module.exports = function(router) {
 
                 // if everything is good, save to request for use in other routes
                 var search = new Search();
-                search.provider_id = decoded.id;
-                search.user_email=decoded.email;
-                search.queryStrings=req.body.query
+
+                search.provider_id   = decoded.id;
+                search.user_email    = decoded.email;
+                search.user_name     = decoded.name;
+                search.provider_name = decoded.provider_name;
+                search.queryStrings  = req.body.query;
 
                 search.save(function (err) {
                     if (err){

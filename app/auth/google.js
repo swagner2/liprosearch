@@ -17,13 +17,13 @@ passport.use(new GoogleStrategy({
         passReqToCallback   : true
     },
     function(request,accessToken, refreshToken, profile, done) {
+        //console.log(profile);
         var searchQuery = {
             email: profile.emails[0].value
         };
         var updates = {
-            name: profile.displayName,
             provider_id: profile.id,
-            email: profile.emails[0].value
+            provider_name:profile.provider
         };
 
         var options = {
@@ -37,6 +37,9 @@ passport.use(new GoogleStrategy({
                 newuser.name= profile.displayName;
                 newuser.provider_id= profile.id;
                 newuser.email= profile.emails[0].value;
+                newuser.first_name= profile.name.givenName;
+                newuser.last_name=profile.name.familyName;
+                newuser.provider_name=profile.provider
 
                 newuser.save(function(err,user){
                     if(err) {
@@ -48,7 +51,9 @@ passport.use(new GoogleStrategy({
                                 "email": user.email,
                                 "time_zone": "America/Los_Angeles",
                                 "custom_fields": {
-                                    "name": user.name
+                                    "name": user.name,
+                                    "first_name":user.first_name,
+                                    "last_name":user.last_name
                                 },
                                 "tags":dripSubscriberTag,
                             }]
