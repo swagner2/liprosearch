@@ -1,13 +1,17 @@
 {
-  "name": "linkedIn",
+  "name": "liprosearch",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "author": "Steven Wagner",
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
-  "author": "Jon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swagner2/liprosearch.git"
+  },
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
